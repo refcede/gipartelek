@@ -1,204 +1,219 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>gipar badut</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        /* CSS LAMA (TIDAK BERUBAH) */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gipar Badut</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        .background-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-image: url('badut.jpg');
-            background-size: cover;
-            background-position: center;
-            filter: blur(5px) brightness(0.7);
-        }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body,html{
+    width:100%;height:100%;
+    font-family:'Courier New', monospace;
+    overflow:hidden;
+    background:url('badut.jpg') center/cover no-repeat;
+    
+}
 
-        .content-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            color: white;
-        }
+/* BACKGROUND GAMBAR */
+.background-container{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:url('badut.jpg') center/cover no-repeat;
+    filter:blur(5px) brightness(0.7);
+    z-index:-1;
+}
 
-        .meme-box {
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-            max-width: 90%;
-            animation: fadeIn 2s ease-in-out;
-        }
+/* LAYAR AWAL */
+#start-screen{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:rgba(0,0,0,0.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2000;
+}
 
-        .meme-image {
-            max-width: 400px;
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 3px solid white;
-        }
+/* Tombol play estetik */
+#start-btn{
+    width:100px;height:100px;
+    border:2px solid #fff;
+    border-radius:50%;
+    background:transparent;
+    color:#fff;
+    font-size:2em;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+}
+#start-btn:hover{
+    transform:scale(1.1);
+    box-shadow:0 0 15px rgba(255,255,255,0.4);
+}
 
-        .lyrics p {
-            margin: 5px 0;
-            font-size: 1.2em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-            line-height: 1.6;
-        }
+/* KONTEN MEME */
+.content-wrapper{
+    display:none; /* disembunyikan di awal */
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    text-align:center;
+    color:white;
+}
+.meme-box{
+    background-color:rgba(0,0,0,0.5);
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.7);
+    max-width:90%;
+    animation:fadeIn 2s ease-in-out;
+}
+.meme-image{
+    max-width:400px;
+    width:100%;
+    height:auto;
+    border-radius:10px;
+    margin-bottom:20px;
+    border:3px solid white;
+}
+.lyrics p{
+    margin:5px 0;
+    font-size:1.2em;
+    text-shadow:2px 2px 4px rgba(0,0,0,0.8);
+    line-height:1.6;
+}
+@keyframes fadeIn{
+    from{opacity:0;transform:scale(0.9);}
+    to{opacity:1;transform:scale(1);}
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
+/* IKON PESAN */
+#message-icon{
+    position:fixed;
+    bottom:30px; right:30px;
+    font-size:3em;
+    color:white;
+    cursor:pointer;
+    z-index:1000;
+    transition:transform .3s ease;
+    display:none; /* disembunyikan di awal */
+}
+#message-icon:hover{transform:scale(1.2);}
 
-        /* === CSS BARU UNTUK IKON DAN POPUP PESAN === */
-        
-        /* Styling untuk ikon pesan di pojok kanan bawah */
-        #message-icon {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            font-size: 3em; /* Ukuran ikon */
-            color: white;
-            cursor: pointer;
-            z-index: 1000;
-            transition: transform 0.3s ease;
-        }
-
-        #message-icon:hover {
-            transform: scale(1.2); /* Efek membesar saat disentuh mouse */
-        }
-        
-        /* Kontainer popup pesan */
-        #message-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            max-width: 500px;
-            background-color: rgba(20, 20, 20, 0.9);
-            color: #f0f0f0;
-            border: 2px solid white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.8);
-            z-index: 1001;
-            display: none; /* Sembunyikan secara default */
-            font-family: 'Verdana', sans-serif;
-        }
-
-        /* Teks di dalam popup */
-        #message-text {
-            font-size: 1.1em;
-            line-height: 1.7;
-            min-height: 60px; /* Beri ruang agar kotak tidak loncat-loncat saat teks muncul */
-        }
-        
-        /* Tombol close (X) */
-        #close-btn {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 2em;
-            color: white;
-            cursor: pointer;
-        }
-
-    </style>
+/* POPUP PESAN */
+#message-popup{
+    position:fixed;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:80%; max-width:500px;
+    background:rgba(20,20,20,0.9);
+    color:#f0f0f0;
+    border:2px solid white;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 5px 25px rgba(0,0,0,0.8);
+    z-index:1001;
+    display:none;
+}
+#message-text{
+    font-size:1.1em;
+    line-height:1.7;
+    min-height:60px;
+}
+#close-btn{
+    position:absolute;
+    top:10px;right:20px;
+    font-size:2em;
+    color:white;
+    cursor:pointer;
+}
+</style>
 </head>
 <body>
 
-    <audio id="background-music" autoplay loop>
-        <source src="badu.mp3" type="audio/mpeg">
-        Browser Anda tidak mendukung elemen audio.
-    </audio>
+<audio id="background-music" loop>
+  <source src="badu.mp3" type="audio/mpeg">
+</audio>
 
-    <div class="background-container"></div>
+<div class="background-container"></div>
 
-    <div class="content-wrapper">
-        <div class="meme-box">
-            <img src="badut.jpg" alt="gipar" class="meme-image">
-            <div class="lyrics">
-                <p>Saya siap jadi badutmu,</p>
-                <p>"asalkan jangan ada badut lain di hatimu."</p>
-                <p>>//<</p>
-            </div>
-        </div>
+<!-- Layar awal -->
+<div id="start-screen">
+    <button id="start-btn"><i class="fa-solid fa-play"></i></button>
+</div>
+
+<!-- Konten meme -->
+<div class="content-wrapper">
+  <div class="meme-box">
+    <img src="badut.jpg" alt="gipar" class="meme-image">
+    <div class="lyrics">
+      <p>Saya siap jadi badutmu,</p>
+      <p>"asalkan jangan ada badut lain di hatimu."</p>
+      <p>>//<</p>
     </div>
-    
-    <div id="message-icon">
-        <i class="fas fa-envelope"></i>
-    </div>
-    
-    <div id="message-popup">
-        <span id="close-btn">&times;</span>
-        <p id="message-text"></p>
-    </div>
+  </div>
+</div>
 
+<!-- Ikon pesan -->
+<div id="message-icon"><i class="fas fa-envelope"></i></div>
 
-    <script>
-        // Ambil elemen-elemen yang dibutuhkan
-        const messageIcon = document.getElementById('message-icon');
-        const messagePopup = document.getElementById('message-popup');
-        const messageTextElement = document.getElementById('message-text');
-        const closeBtn = document.getElementById('close-btn');
+<!-- Popup pesan -->
+<div id="message-popup">
+    <span id="close-btn">&times;</span>
+    <p id="message-text"></p>
+</div>
 
-        // Teks yang ingin ditampilkan dengan efek ketik
-        const fullMessage = "Halo! saya gipari. saya siap menjadi badut penghibur mu #boycotgipar :)";
-        
-        let typingInterval; // Variabel untuk menyimpan interval agar bisa dihentikan
+<script>
+const audio = document.getElementById('background-music');
+const startScreen = document.getElementById('start-screen');
+const startBtn = document.getElementById('start-btn');
+const contentWrapper = document.querySelector('.content-wrapper');
+const messageIcon = document.getElementById('message-icon');
+const messagePopup = document.getElementById('message-popup');
+const messageTextElement = document.getElementById('message-text');
+const closeBtn = document.getElementById('close-btn');
 
-        // Fungsi untuk menampilkan teks dengan efek ketik
-        function startTypingEffect() {
-            let i = 0;
-            messageTextElement.innerHTML = ''; // Kosongkan teks sebelumnya
-            
-            // Hentikan interval lama jika ada
-            if (typingInterval) {
-                clearInterval(typingInterval);
-            }
-            
-            typingInterval = setInterval(() => {
-                if (i < fullMessage.length) {
-                    messageTextElement.innerHTML += fullMessage.charAt(i);
-                    i++;
-                } else {
-                    clearInterval(typingInterval); // Hentikan interval jika teks sudah selesai
-                }
-            }, 50); // Kecepatan ketik (dalam milidetik)
+const fullMessage = "Halo! saya gipari. saya siap menjadi badut penghibur mu #boycotgipar :)";
+let typingInterval;
+
+startBtn.addEventListener('click',()=>{
+    audio.play().then(()=>{
+        startScreen.style.display='none';
+        contentWrapper.style.display='flex';
+        messageIcon.style.display='block';
+    }).catch(err=>console.log("Autoplay diblokir:",err));
+});
+
+function startTypingEffect(){
+    let i=0;
+    messageTextElement.innerHTML='';
+    if(typingInterval) clearInterval(typingInterval);
+    typingInterval = setInterval(()=>{
+        if(i<fullMessage.length){
+            messageTextElement.innerHTML += fullMessage.charAt(i);
+            i++;
+        }else{
+            clearInterval(typingInterval);
         }
+    },50);
+}
 
-        // Event listener saat ikon pesan di-klik
-        messageIcon.addEventListener('click', () => {
-            messagePopup.style.display = 'block'; // Tampilkan popup
-            startTypingEffect(); // Mulai efek ketik
-        });
+messageIcon.addEventListener('click',()=>{
+    messagePopup.style.display='block';
+    startTypingEffect();
+});
 
-        // Event listener saat tombol close (X) di-klik
-        closeBtn.addEventListener('click', () => {
-            messagePopup.style.display = 'none'; // Sembunyikan popup
-            clearInterval(typingInterval); // Hentikan efek ketik jika sedang berjalan
-        });
-    </script>
+closeBtn.addEventListener('click',()=>{
+    messagePopup.style.display='none';
+    clearInterval(typingInterval);
+});
+</script>
 
 </body>
-
 </html>
