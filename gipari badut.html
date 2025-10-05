@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gipar badut</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* CSS LAMA (TIDAK BERUBAH) */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: url('badut.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(5px) brightness(0.7);
+        }
+
+        .content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            color: white;
+        }
+
+        .meme-box {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            max-width: 90%;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .meme-image {
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 3px solid white;
+        }
+
+        .lyrics p {
+            margin: 5px 0;
+            font-size: 1.2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* === CSS BARU UNTUK IKON DAN POPUP PESAN === */
+        
+        /* Styling untuk ikon pesan di pojok kanan bawah */
+        #message-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            font-size: 3em; /* Ukuran ikon */
+            color: white;
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        #message-icon:hover {
+            transform: scale(1.2); /* Efek membesar saat disentuh mouse */
+        }
+        
+        /* Kontainer popup pesan */
+        #message-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 500px;
+            background-color: rgba(20, 20, 20, 0.9);
+            color: #f0f0f0;
+            border: 2px solid white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.8);
+            z-index: 1001;
+            display: none; /* Sembunyikan secara default */
+            font-family: 'Verdana', sans-serif;
+        }
+
+        /* Teks di dalam popup */
+        #message-text {
+            font-size: 1.1em;
+            line-height: 1.7;
+            min-height: 60px; /* Beri ruang agar kotak tidak loncat-loncat saat teks muncul */
+        }
+        
+        /* Tombol close (X) */
+        #close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 2em;
+            color: white;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <audio id="background-music" autoplay loop>
+        <source src="badu.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+    <div class="background-container"></div>
+
+    <div class="content-wrapper">
+        <div class="meme-box">
+            <img src="badut.jpg" alt="gipar" class="meme-image">
+            <div class="lyrics">
+                <p>Saya siap jadi badutmu,</p>
+                <p>"asalkan jangan ada badut lain di hatimu."</p>
+                <p>>//<</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="message-icon">
+        <i class="fas fa-envelope"></i>
+    </div>
+    
+    <div id="message-popup">
+        <span id="close-btn">&times;</span>
+        <p id="message-text"></p>
+    </div>
+
+
+    <script>
+        // Ambil elemen-elemen yang dibutuhkan
+        const messageIcon = document.getElementById('message-icon');
+        const messagePopup = document.getElementById('message-popup');
+        const messageTextElement = document.getElementById('message-text');
+        const closeBtn = document.getElementById('close-btn');
+
+        // Teks yang ingin ditampilkan dengan efek ketik
+        const fullMessage = "Halo! saya gipari. saya siap menjadi badut penghibur mu #boycotgipar :)";
+        
+        let typingInterval; // Variabel untuk menyimpan interval agar bisa dihentikan
+
+        // Fungsi untuk menampilkan teks dengan efek ketik
+        function startTypingEffect() {
+            let i = 0;
+            messageTextElement.innerHTML = ''; // Kosongkan teks sebelumnya
+            
+            // Hentikan interval lama jika ada
+            if (typingInterval) {
+                clearInterval(typingInterval);
+            }
+            
+            typingInterval = setInterval(() => {
+                if (i < fullMessage.length) {
+                    messageTextElement.innerHTML += fullMessage.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingInterval); // Hentikan interval jika teks sudah selesai
+                }
+            }, 50); // Kecepatan ketik (dalam milidetik)
+        }
+
+        // Event listener saat ikon pesan di-klik
+        messageIcon.addEventListener('click', () => {
+            messagePopup.style.display = 'block'; // Tampilkan popup
+            startTypingEffect(); // Mulai efek ketik
+        });
+
+        // Event listener saat tombol close (X) di-klik
+        closeBtn.addEventListener('click', () => {
+            messagePopup.style.display = 'none'; // Sembunyikan popup
+            clearInterval(typingInterval); // Hentikan efek ketik jika sedang berjalan
+        });
+    </script>
+
+</body>
+</html>
